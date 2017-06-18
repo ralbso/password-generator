@@ -1,3 +1,5 @@
+# Needs optimization
+
 def rotate(to_cipher, rot):
     '''
     to_cipher is the string we want to encode as a Caesar cipher
