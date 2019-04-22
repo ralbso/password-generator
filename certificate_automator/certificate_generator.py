@@ -1,7 +1,7 @@
 __author__ = "Raul Mojica Soto-Albors"
 __copyright__ = "Copyright (c) 2019 Raul Mojica Soto-Albors"
 __license__ = "MIT License"
-__version__ = "1.0"
+__version__ = "1.2.1"
 
 import io
 import os
@@ -157,8 +157,9 @@ for name in names:
     page.mergePage(new_pdf.getPage(0))
     output.addPage(page)
     # finally, write "output" to a real file
-    outputStream = open(SavePath+"/certificate "+str(name)+".pdf", "wb")
+    loc = SavePath+"/certificate "+str(name)+".pdf"
+    outputStream = open(loc, "wb")
     output.write(outputStream)
     outputStream.close()
 
-email_attendees(names)
+email_attendees(names, loc)

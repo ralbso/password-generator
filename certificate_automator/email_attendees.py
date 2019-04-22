@@ -5,7 +5,7 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 
-def email_attendees(attendees):
+def email_attendees(attendees, filename):
     sender = "ODN (Neuro-RUM)"
     password = input("Type your password and press Enter: ")
 
@@ -27,7 +27,7 @@ def email_attendees(attendees):
 
         plain_text = MIMEText(body, "plain")
 
-        filename = "/Users/Raul/Documents/UPRM/ODN/WPRNS/Certificates/certificate "+str(key)+".pdf"
+        # filename = "/Users/Raul/Documents/UPRM/ODN/WPRNS/Certificates/certificate "+str(key)+".pdf"
 
         with open(filename, "rb") as attachment:
             part = MIMEBase("application", "octet-stream")
