@@ -18,7 +18,12 @@ def email_attendees(attendees):
         message["Bcc"] = receiver
         message["Subject"] = subject
 
-        body = "Hello, "+str(key.split(" ",1)[0])+".\n\nOur records show that you are cool enough to receive this email."
+        body = "Hello "+str(key.split(" ",1)[0])+""",
+        \n\nOur records indicate that you attended the 1st West Puerto Rico Neuroscience Symposium\
+        and qualified for this certificate. We are humbled by your support and hope you thoroughly\
+        enjoyed this first iteration of many more to come!
+        \n\nNote: This certificate was created using a Python algorithm. If there is anything wrong \
+        with your certificate, please let us know as soon as possible to correct any mistakes."""
 
         plain_text = MIMEText(body, "plain")
 

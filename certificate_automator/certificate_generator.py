@@ -1,9 +1,14 @@
+__author__ = "Raul Mojica Soto-Albors"
+__copyright__ = "Copyright (c) 2019 Raul Mojica Soto-Albors"
+__license__ = "MIT License"
+__version__ = "1.0"
+
 import io
 import os
 import platform
-from email_attendees import *
 from tkinter import *
 from tkinter import filedialog
+from email_attendees import *
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.lib.pagesizes import letter
@@ -30,57 +35,103 @@ def get_font(event=None):
     print(FontName)
     print(FontSize)
 
-def choose_font(event=None):
+def select_font(event=None):
     global FilePath
     global FontName
     global FontSize
     choose = Tk()
+    choose.title("Font? What font?")
 
     if platform.system() == "Windows":
-        choose.filename = filedialog.askopenfile(initialdir = "C:/", title="Select font", filetypes=[("Font file formats",("*.ttf","*.otf","*.fnt"))])
+        choose.filename = filedialog.askopenfilename(initialdir = "C:/", title="Font? What font?", \
+        filetypes=[("Font file formats",("*.ttf","*.otf","*.fnt"))])
     else:
-        choose.filename = filedialog.askopenfilename(initialdir = "~/", title="Select font", filetypes=[("Font file formats",("*.ttf","*.otf","*.fnt"))])
+        choose.filename = filedialog.askopenfilename(initialdir = "~/", title="Font? What font?", \
+        filetypes=[("Font file formats",("*.ttf","*.otf","*.fnt"))])
 
     FilePath = choose.filename
     FontName = str(fontName.get())
     FontSize = str(fontSize.get())
     choose.destroy()
 
+def choose_font(event=None):
+    global fontName
+    global fontSize
+    fontDialog = Tk()
+    fontDialog.title("Choose your font!")
 
-fontDialog = Tk()
-Label(fontDialog, text="Font Name").grid(row=0, column=0)
-Label(fontDialog, text="Size").grid(row=0, column=2)
-fontName = Entry(fontDialog)
-fontSize = Entry(fontDialog, width=4)
-fontName.grid(row=0, column=1)
-fontSize.grid(row=0, column=3)
-Button(fontDialog, text="Enter", command=get_font).grid(row=1,column=0,sticky=W+E,pady=4)
-Button(fontDialog, text="Select font", command=choose_font).grid(row=1,column=1,sticky=W+E,pady=4)
-Button(fontDialog, text="Quit", command=fontDialog.destroy).grid(row=1,column=2,sticky=W+E,pady=4)
-fontDialog.bind('<Return>', get_font)
+    Label(fontDialog, text="Font Name").grid(row=0, column=0)
+    Label(fontDialog, text="Size").grid(row=0, column=2)
+    fontName = Entry(fontDialog)
+    fontSize = Entry(fontDialog, width=4)
+    fontName.grid(row=0, column=1)
+    fontSize.grid(row=0, column=3)
+    Button(fontDialog, text="Enter", command=get_font).grid(row=1,column=0,sticky=W+E,pady=4)
+    Button(fontDialog, text="Choose file", command=select_font).grid(row=1,column=1,sticky=W+E,pady=4)
+    Button(fontDialog, text="Quit", command=fontDialog.destroy).grid(row=1,column=2,columnspan=2,sticky=W+E,pady=4)
+    fontDialog.bind('<Return>', get_font)
 
+def choose_template(event=None):
+    global TemplatePath
+    template = Tk()
+    template.title("Choose your template!")
 
-master = Tk()
-Label(master, text="First Name").grid(row=0)
-Label(master, text="Last Name").grid(row=1)
-Label(master, text="Email").grid(row=2)
+    if platform.system() == "Windows":
+        template.filename = filedialog.askopenfilename(initialdir="C:/", title="Choose your template!", \
+        filetypes=[("PDF",("*.pdf"))])
+    else:
+        template.filename = filedialog.askopenfilename(initialdir="~/", title="Choose your template!", \
+        filetypes=[("PDF",("*.pdf"))])
 
-first = Entry(master)
-last = Entry(master)
-email = Entry(master)
+    TemplatePath = template.filename
+    template.destroy()
 
-first.grid(row=0, column=1)
-last.grid(row=1, column=1)
-email.grid(row=2, column=1)
+def save_file(event=None):
+    global SavePath
+    save = Tk()
+    save.title("Choose destination")
 
-Button(master, text="Quit", command=master.quit).grid(row=4,column=2,sticky=W+E,pady=4)
-Button(master, text="Enter", command=show_entry_fields).grid(row=4,column=0,sticky=W+E,pady=4)
-Button(master, text="Select font", command=get_font).grid(row=4,column=1,sticky=W+E,pady=4)
+    if platform.system() == "Windows":
+        save.filename = filedialog.askdirectory(initialdir="C:/", title="Select directory")
+    else:
+        save.filename = filedialog.askdirectory(initialdir="~/", title="Select directory")
 
-master.bind('<Return>',show_entry_fields)
+    SavePath = save.filename
+    print(SavePath)
+    save.destroy()
 
-mainloop()
+def master(event=None):
+    global first
+    global last
+    global email
 
+    master = Tk()
+    master.title("Certificate Generator 3000")
+
+    Label(master, text="First Name").grid(row=0)
+    Label(master, text="Last Name").grid(row=1)
+    Label(master, text="Email").grid(row=2)
+    Label(master, text=__copyright__).grid(row=5, columnspan=5)
+
+    first = Entry(master, width=30)
+    last = Entry(master, width=30)
+    email = Entry(master, width=30)
+
+    first.grid(row=0, column=1, columnspan=5)
+    last.grid(row=1, column=1, columnspan=5)
+    email.grid(row=2, column=1, columnspan=5)
+
+    Button(master, text="Enter", command=show_entry_fields).grid(row=4,column=0,sticky=W+E,pady=4)
+    Button(master, text="Select font", command=choose_font).grid(row=4,column=1,sticky=W+E,pady=4)
+    Button(master, text="Select template", command=choose_template).grid(row=4,column=2,sticky=W+E,pady=4)
+    Button(master, text="Save in", command=save_file).grid(row=4, column=3,sticky=W+E,pady=4)
+    Button(master, text="Quit", command=master.quit).grid(row=4,column=4,sticky=W+E,pady=4)
+
+    master.bind('<Return>',show_entry_fields)
+
+    mainloop()
+
+master()
 
 for name in names:
     packet = io.BytesIO()
@@ -88,10 +139,10 @@ for name in names:
     can = canvas.Canvas(packet, pagesize=letter)
     can.getAvailableFonts()
     try:
-        can.setFont(FontName, size=38)
+        can.setFont(FontName, size=FontSize)
     except:
         pdfmetrics.registerFont(TTFont(FontName,FilePath))
-        can.setFont(FontName, size=38)
+        can.setFont(FontName, size=FontSize)
     can.drawCentredString(400, 300, name)
     can.save()
 
@@ -99,14 +150,14 @@ for name in names:
     packet.seek(0)
     new_pdf = PdfFileReader(packet)
     # read your existing PDF
-    existing_pdf = PdfFileReader(open("/Users/Raul/Downloads/Certificate.pdf", "rb"))
+    existing_pdf = PdfFileReader(open(TemplatePath, "rb"))
     output = PdfFileWriter()
     # add the "watermark" (which is the new pdf) on the existing page
     page = existing_pdf.getPage(0)
     page.mergePage(new_pdf.getPage(0))
     output.addPage(page)
     # finally, write "output" to a real file
-    outputStream = open("/Users/Raul/Documents/UPRM/ODN/WPRNS/Certificates/certificate "+str(name)+".pdf", "wb")
+    outputStream = open(SavePath+"/certificate "+str(name)+".pdf", "wb")
     output.write(outputStream)
     outputStream.close()
 
